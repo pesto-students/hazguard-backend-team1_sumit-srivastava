@@ -1,8 +1,8 @@
 import express from "express";
-import { auth } from "../middlewares/auth.js";
+import { authenticate } from "../controllers/auth.js";
 
 const router = express.Router();
 
-// router.get("", auth, );
+// router.get("", authenticate, );
 
 export default router;

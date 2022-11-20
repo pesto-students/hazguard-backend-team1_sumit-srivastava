@@ -51,7 +51,7 @@ const hazardSchema = mongoose.Schema({
 		default: 0,
 	},
 	isDeleted: {
-		type: Boolen,
+		type: Boolean,
 		required: true,
 		default: false,
 	},
@@ -69,4 +69,4 @@ const hazardSchema = mongoose.Schema({
 	},
 });
 
-export const hazardModel = mongoose.model("Hazards", hazardSchema);
+export const hazardModel = mongoose.model("Hazard", hazardSchema);

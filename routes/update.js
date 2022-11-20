@@ -1,8 +1,8 @@
 import express from "express";
-import { auth } from "../middlewares/auth.js";
+import { authenticate } from "../controllers/auth.js";
 
 const router = express.Router();
 
-// router.patch("", auth, );
+// router.patch("", authenticate, );
 
 export default router;

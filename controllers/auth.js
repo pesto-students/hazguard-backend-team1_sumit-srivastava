@@ -1,113 +1,199 @@
 import User from "../models/user.js";
+import Token from "../models/token.js";
 import Jwt from "jsonwebtoken";
 import { sendEmail } from "../utils/mail.js";
 import { v4 } from "uuid";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const register = async (req, res) => {
-	const newuser = new User({
-		userId: v4(),
-		firstName: req.body.firstName,
-		lastName: req.body.lastName,
-		dob: req.body.dob,
-		email: req.body.email,
-		confirmationToken: Jwt.sign(req.body.email, process.env.SECRET),
-	});
-	User.findOne({ email: newuser.email }, function (err, user) {
-		if (user) return res.status(400).json({ auth: false, message: "email exists" });
-		if (!req.body.password) return res.status(400).json({ success: false, message: "password required" });
-		newuser.setPassword(req.body.password);
-		newuser.save((err, doc) => {
-			if (err) {
-				return res.status(400).json({ success: false, message: err.message });
-			}
-			res.status(200).json({
-				success: true,
-				user: doc,
+	User.findOne({ email: req.body.email }, function (err, user) {
+		if (err) return res.status(500).json({ error: true, message: err });
+		if (user) return res.status(409).json({ error: true, message: "email exists" });
+		if (!req.body.password) return res.status(400).json({ error: true, message: "password required" });
+		const newUser = new User({
+			userId: v4(),
+			companyName: req.body.companyName,
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			email: req.body.email,
+			mobileNumber: req.body.mobileNumber,
+			state: req.body.state,
+			country: req.body.country,
+			industry: req.body.industry,
+			department: req.body.department,
+			confirmationToken: Jwt.sign(
+				{
+					email: req.body.email,
+					mobileNumber: req.body.mobileNumber,
+				},
+				process.env.CONFIRMATION_TOKEN_SECRET
+			),
+		});
+		newUser.setPassword(req.body.password);
+		newUser.save((err, doc) => {
+			if (err) return res.status(500).json({ error: true, message: err });
+			sendEmail(newUser.firstName, newUser.email, newUser.confirmationToken, "verificationEmail");
+			return res.status(200).json({
+				message: "User created succesfully.",
 			});
-			sendEmail(newuser.firstName, newuser.email, newuser.confirmationToken, "verificationEmail");
 		});
 	});
 };
 
 const verify = async (req, res) => {
-	User.findOne({
-		confirmationToken: req.params.confirmationToken,
-	})
-		.then((user) => {
-			if (!user) {
-				return res.status(404).send({ message: "User Not found." });
-			}
-			user.status = "Active";
-			user.save((err) => {
-				if (err) {
-					return res.status(500).send({ message: err });
-				} else return res.status(200).send({ message: "user verified" });
-			});
-		})
-		.catch((e) => console.log("error", e));
+	User.findOne({ confirmationToken: req.params.confirmationToken }, (err, user) => {
+		if (err) return res.status(500).json({ error: true, message: err });
+		if (!user) {
+			return res.status(404).json({ error: true, message: "User Not found." });
+		}
+		user.status = "Active";
+		user.save((err, doc) => {
+			if (err) return res.status(500).json({ error: true, message: err });
+			return res.status(200).json({ message: "user verified" });
+		});
+	});
+};
+
+const generateAccessToken = (userData) => {
+	return Jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30m" });
 };
 
 const logIn = async (req, res) => {
-	const token = req.cookies.auth;
-	User.findByToken(token, (err, user) => {
-		if (err) return res(err);
-		if (user)
-			return res.status(400).json({
+	User.findOne({ email: req.body.email }, function (err, user) {
+		if (err) return res.status(500).json({ error: true, message: err });
+		if (!user) {
+			return res.status(404).json({
 				error: true,
-				message: "You are already logged in",
+				message: "User does not exist",
 			});
-		else {
-			User.findOne({ email: req.body.email }, function (err, user) {
-				if (!user) return res.json({ isAuth: false, message: " Auth failed ,email not found" });
-				if (!user.validPassword(req.body.password)) {
-					return res.status(400).json({
-						stat: "error",
-						message: "Wrong Password",
-					});
-				} else if (user.status !== "Active") {
-					return res.status(401).send({
-						stat: "error",
-						message: "Pending Account. Please Verify Your Email!",
-					});
-				} else {
-					user.generateToken((err, user) => {
-						if (err) return res.status(400).send(err);
-						res.cookie("auth", user.token).json({
-							isAuth: true,
-							id: user._id,
-							email: user.email,
-						});
-					});
-				}
+		}
+		if (!user.validPassword(req.body.password)) {
+			return res.status(403).json({
+				error: true,
+				message: "Wrong Password",
+			});
+		}
+		if (user.status !== "Active") {
+			return res.status(403).json({
+				error: true,
+				message: "Pending Account. Please Verify Your Email!",
+			});
+		}
+		const accessToken = generateAccessToken({
+			userId: user.userId,
+			email: user.email,
+		});
+		const refreshToken = Jwt.sign(
+			{
+				userId: user.userId,
+				email: user.email,
+			},
+			process.env.REFRESH_TOKEN_SECRET
+		);
+		const token = new Token({
+			token: refreshToken,
+		});
+		token.save((err, doc) => {
+			if (err) return res.status(500).json({ error: true, message: err });
+			return res.status(200).json({
+				message: "User successfully logged in.",
+				accessToken,
+				refreshToken,
+			});
+		});
+	});
+};
+
+const getToken = async (req, res) => {
+	if (!req.body.token) {
+		return res.status(401).json({
+			error: true,
+			message: "Unauthorized",
+		});
+	}
+	Token.findOne({ token: req.body.token }, function (err, token) {
+		if (err) return res.status(500).json({ error: true, message: err });
+		if (!token) {
+			return res.status(404).json({
+				error: true,
+				message: "Invalid token",
+			});
+		}
+		Jwt.verify(req.body.token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+			if (err) return res.status(500).json({ error: true, message: err });
+			if (!user) {
+				return res.status(403).json({
+					error: true,
+					message: "Unauthorized",
+				});
+			}
+			return res.status(200).json({
+				accessToken: generateAccessToken({
+					userId: user.userId,
+					email: user.email,
+				}),
+			});
+		});
+	});
+};
+
+const logOut = (req, res) => {
+	Token.deleteOne({ token: req.body.token }, function (err, token) {
+		if (err) return res.status(500).json({ error: true, message: err });
+		if (!token.deletedCount) {
+			return res.status(404).json({
+				error: true,
+				message: "Invalid token",
+			});
+		} else {
+			return res.status(200).json({
+				message: "Logged out successfully",
 			});
 		}
 	});
 };
 
-const logOut = (req, res) => {
-	req.user.deleteToken(req.token, (err, user) => {
-		if (err) return res.status(400).send(err);
-		res.sendStatus(200);
-	});
-};
-
 const profile = (req, res) => {
-	res.status(200).json({
-		isAuth: true,
-		userId: req.user._doc.userId,
-		firstName: req.user._doc.firstName,
-		lastName: req.user._doc.lastName,
-		dob: req.user._doc.dob,
-		country: req.user._doc.country,
-		email: req.user._doc.email,
+	User.findOne({ userId: req.user.userId }, function (err, user) {
+		if (err) return res.status(500).json({ error: true, message: err });
+		return res.status(200).json({
+			userId: user.userId,
+			companyName: user.companyName,
+			firstName: user.firstName,
+			lastName: user.lastName,
+			email: user.email,
+			mobileNumber: user.mobileNumber,
+			state: user.state,
+			country: user.country,
+			industry: user.industry,
+			department: user.department,
+			postCount: user.postCount,
+			saved: user.saved,
+		});
 	});
 };
 
-const isAuth = (req, res) => {
-	res.status(200).json({
-		success: true,
-		message: "user authenticated",
+const authenticate = (req, res, next) => {
+	const authHeader = req.headers["authorization"];
+	const token = authHeader && authHeader.split(" ")[1];
+	if (token === null) {
+		return res.status(401).json({
+			error: true,
+			message: "Unauthorized user!",
+		});
+	}
+	Jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+		if (err) {
+			return res.status(403).json({
+				error: true,
+				message: "Invalid Token",
+			});
+		}
+		req.user = user;
+		next();
 	});
 };
 
-export { register, verify, logIn, logOut, profile, isAuth };
+export { register, verify, logIn, logOut, profile, getToken, authenticate };

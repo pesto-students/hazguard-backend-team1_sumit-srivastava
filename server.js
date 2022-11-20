@@ -9,7 +9,6 @@ const connectDB = async () => {
 		});
 	} catch (err) {
 		console.error(err);
-		process.exit(1);
 	}
 };
 
@@ -19,7 +18,6 @@ const start = async () => {
 		app.listen(process.env.PORT, () => console.log(`Server is listening on port ${process.env.PORT}...`));
 	} catch (err) {
 		console.error(err);
-		process.exit(1);
 	}
 };
 

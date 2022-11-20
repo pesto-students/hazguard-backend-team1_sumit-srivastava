@@ -19,7 +19,9 @@ jobs:
                   touch .env
                   echo MONOGODBURL=${{ secrets.MONOGODBURL }} >> .env
                   echo PORT=${{ secrets.PORT }} >> .env
-                  echo SECRET=${{ secrets.SECRET }} >> .env
+                  echo ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }} >> .env
+                  echo REFRESH_TOKEN_SECRET=${{ secrets.REFRESH_TOKEN_SECRET }} >> .env
+                  echo CONFIRMATION_TOKEN_SECRET=${{ secrets.CONFIRMATION_TOKEN_SECRET }} >> .env
                   echo PASSWORD=${{ secrets.PASSWORD }} >> .env
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v3

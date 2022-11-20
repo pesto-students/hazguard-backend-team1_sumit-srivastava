@@ -28,25 +28,6 @@ const userSchema = mongoose.Schema({
 		maxlength: 100,
 		trim: true,
 	},
-	dob: {
-		type: Date,
-		required: true,
-		validate: {
-			validator: function (dob) {
-				const a = new Date(dob),
-					b = new Date();
-				const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-				const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-				const difference = Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24)) / 365;
-				if (difference > 18) {
-					return true;
-				} else {
-					return false;
-				}
-			},
-			message: () => `Age should be greater than 18`,
-		},
-	},
 	email: {
 		type: String,
 		required: true,
@@ -82,11 +63,12 @@ const userSchema = mongoose.Schema({
 		required: true,
 		default: 0,
 	},
-	saved: {
-		type: [String],
-		required: true,
-		default: [],
-	},
+	saved: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Hazards",
+		},
+	],
 	hash: {
 		type: String,
 		default: "",
@@ -107,9 +89,6 @@ const userSchema = mongoose.Schema({
 		type: String,
 		unique: true,
 	},
-	token: {
-		type: String,
-	},
 });
 
 userSchema.methods.setPassword = function (password) {
@@ -120,34 +99,6 @@ userSchema.methods.setPassword = function (password) {
 userSchema.methods.validPassword = function (password) {
 	const hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, `sha512`).toString(`hex`);
 	return this.hash === hash;
-};
-
-userSchema.methods.generateToken = function (cb) {
-	const user = this;
-	const token = Jwt.sign(user._id.toHexString(), process.env.SECRET);
-	user.token = token;
-	user.save(function (err, user) {
-		if (err) return cb(err);
-		cb(null, user);
-	});
-};
-
-userSchema.statics.findByToken = function (token, cb) {
-	const user = this;
-	Jwt.verify(token, process.env.SECRET, function (err, decode) {
-		user.findOne({ _id: decode, token: token }, function (err, user) {
-			if (err) return cb(err);
-			cb(null, user);
-		});
-	});
-};
-
-userSchema.methods.deleteToken = function (token, cb) {
-	const user = this;
-	user.update({ $unset: { token: 1 } }, function (err, user) {
-		if (err) return cb(err);
-		cb(null, user);
-	});
 };
 
 export default mongoose.model("User", userSchema);
