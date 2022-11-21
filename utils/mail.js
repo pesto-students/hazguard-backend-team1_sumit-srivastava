@@ -19,7 +19,7 @@ const sendEmail = (name, email, info, key) => {
 					html: `<h1>Email Confirmation</h1>
 		  <h2>Hello ${name}</h2>
 		  <p>Thank you for registering. Please confirm your email by clicking on the following link</p>
-		  <a href=http://localhost:8080/api/auth/register/verify/${info}> Click here</a>`,
+		  <a href=https://backend.hazguard.tech/api/auth/register/verify/${info}> Click here</a>`,
 				})
 				.catch((err) => console.log(err));
 			break;
