@@ -24,9 +24,9 @@ const userSchema = mongoose.Schema({
 	},
 	lastName: {
 		type: String,
-		required: false,
 		maxlength: 100,
 		trim: true,
+		default: "",
 	},
 	email: {
 		type: String,
@@ -37,30 +37,29 @@ const userSchema = mongoose.Schema({
 	},
 	mobileNumber: {
 		type: Number,
-		required: true,
 		trim: true,
 		unique: true,
+		default: "",
 	},
 	state: {
 		type: String,
-		required: true,
+		default: "",
 	},
 	country: {
 		type: String,
-		required: true,
+		default: "",
 	},
 	industry: {
 		type: String,
-		required: true,
-		enum: ["Agriculture", "Apparel", "Oil & Gas Production", "Construction", "Manufacturing", "Mining", "Forestry", "Shipping", "Transport", "Utilities"],
+		enum: ["", "Agriculture", "Apparel", "Oil & Gas Production", "Construction", "Manufacturing", "Mining", "Forestry", "Shipping", "Transport", "Utilities"],
+		default: "",
 	},
 	department: {
 		type: String,
-		required: true,
+		default: "",
 	},
 	postCount: {
 		type: Number,
-		required: true,
 		default: 0,
 	},
 	saved: [
@@ -72,17 +71,14 @@ const userSchema = mongoose.Schema({
 	hash: {
 		type: String,
 		default: "",
-		required: true,
 	},
 	salt: {
 		type: String,
 		default: "",
-		required: true,
 	},
 	status: {
 		type: String,
 		enum: ["Pending", "Active"],
-		required: true,
 		default: "Pending",
 	},
 	confirmationToken: {

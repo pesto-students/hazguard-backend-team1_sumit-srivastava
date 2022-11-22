@@ -15,7 +15,7 @@ dotenv.config();
 
 app.use(
 	cors({
-		origin: ["http://127.0.0.1:5173", "https://www.hazguard.tech", "https://hazguard.tech"],
+		origin: ["http://localhost:5173", "http://127.0.0.1:5173", "https://www.hazguard.tech", "https://hazguard.tech"],
 		credentials: true,
 	})
 );

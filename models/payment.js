@@ -14,6 +14,12 @@ const paymentsSchema = new mongoose.Schema({
 		trim: true,
 		lowercase: true,
 	},
+	country: {
+		type: String,
+		required: true,
+		trim: true,
+		lowercase: true,
+	},
 	orderId: {
 		type: String,
 		required: true,

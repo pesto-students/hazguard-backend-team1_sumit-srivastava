@@ -14,22 +14,10 @@ const register = async (req, res) => {
 		if (!req.body.password) return res.status(400).json({ error: true, message: "password required" });
 		const newUser = new User({
 			userId: v4(),
-			companyName: req.body.companyName,
 			firstName: req.body.firstName,
-			lastName: req.body.lastName,
 			email: req.body.email,
-			mobileNumber: req.body.mobileNumber,
-			state: req.body.state,
-			country: req.body.country,
-			industry: req.body.industry,
-			department: req.body.department,
-			confirmationToken: Jwt.sign(
-				{
-					email: req.body.email,
-					mobileNumber: req.body.mobileNumber,
-				},
-				process.env.CONFIRMATION_TOKEN_SECRET
-			),
+			companyName: req.body.companyName,
+			confirmationToken: Jwt.sign(req.body.email, process.env.CONFIRMATION_TOKEN_SECRET),
 		});
 		newUser.setPassword(req.body.password);
 		newUser.save((err, doc) => {
