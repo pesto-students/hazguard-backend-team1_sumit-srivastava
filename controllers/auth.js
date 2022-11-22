@@ -17,7 +17,7 @@ const register = async (req, res) => {
 			firstName: req.body.firstName,
 			email: req.body.email,
 			companyName: req.body.companyName,
-			confirmationToken: Jwt.sign(req.body.email, process.env.CONFIRMATION_TOKEN_SECRET),
+			confirmationToken: Jwt.sign(req.body.email, process.env.CONFIRMATION_TOKEN_SECRET).split(".").join(""),
 		});
 		newUser.setPassword(req.body.password);
 		newUser.save((err, doc) => {
