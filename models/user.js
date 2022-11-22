@@ -38,7 +38,6 @@ const userSchema = mongoose.Schema({
 	mobileNumber: {
 		type: Number,
 		trim: true,
-		unique: true,
 		default: "",
 	},
 	state: {
