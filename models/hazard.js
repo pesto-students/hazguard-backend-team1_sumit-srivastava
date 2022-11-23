@@ -4,7 +4,6 @@ const hazardSchema = mongoose.Schema({
 	userId: {
 		type: String,
 		required: true,
-		unique: true,
 		trim: true,
 	},
 	hazardId: {
@@ -42,7 +41,7 @@ const hazardSchema = mongoose.Schema({
 		required: true,
 	},
 	date: {
-		type: Date.now(),
+		type: Date,
 		required: true,
 	},
 	views: {
@@ -69,4 +68,4 @@ const hazardSchema = mongoose.Schema({
 	},
 });
 
-export const hazardModel = mongoose.model("Hazard", hazardSchema);
+export default mongoose.model("Hazard", hazardSchema);

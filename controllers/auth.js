@@ -7,7 +7,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const register = async (req, res) => {
+const register = (req, res) => {
 	User.findOne({ email: req.body.email }, function (err, user) {
 		if (err) return res.status(500).json({ error: true, message: err });
 		if (user) return res.status(409).json({ error: true, message: "email exists" });
@@ -30,12 +30,10 @@ const register = async (req, res) => {
 	});
 };
 
-const verify = async (req, res) => {
+const verify = (req, res) => {
 	User.findOne({ confirmationToken: req.params.confirmationToken }, (err, user) => {
 		if (err) return res.status(500).json({ error: true, message: err });
-		if (!user) {
-			return res.status(404).json({ error: true, message: "User Not found." });
-		}
+		if (!user) return res.status(404).json({ error: true, message: "User Not found." });
 		user.status = "Active";
 		user.save((err, doc) => {
 			if (err) return res.status(500).json({ error: true, message: err });
@@ -48,7 +46,7 @@ const generateAccessToken = (userData) => {
 	return Jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
 };
 
-const logIn = async (req, res) => {
+const logIn = (req, res) => {
 	User.findOne({ email: req.body.email }, function (err, user) {
 		if (err) return res.status(500).json({ error: true, message: err });
 		if (!user) {
@@ -94,7 +92,7 @@ const logIn = async (req, res) => {
 	});
 };
 
-const getToken = async (req, res) => {
+const getToken = (req, res) => {
 	if (!req.body.token) {
 		return res.status(401).json({
 			error: true,
@@ -184,4 +182,30 @@ const authenticate = (req, res, next) => {
 	});
 };
 
-export { register, verify, logIn, logOut, profile, getToken, authenticate };
+const updateProfile = (req, res) => {
+	User.updateOne(
+		{ userId: req.user.userId },
+		{
+			$set: {
+				companyName: req.body.companyName,
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				mobileNumber: req.body.mobileNumber,
+				state: req.body.state,
+				country: req.body.country,
+				industry: req.body.industry,
+				department: req.body.department,
+			},
+		},
+		function (err, doc) {
+			if (err) return res.status(500).json({ error: true, message: err });
+			if (!doc.matchedCount) return res.status(404).json({ error: true, message: "User not found!" });
+			if (!doc.modifiedCount) return res.status(409).json({ error: true, message: "No changes!" });
+			return res.status(200).json({
+				message: "User updated succesfully.",
+			});
+		}
+	);
+};
+
+export { register, verify, logIn, logOut, profile, getToken, authenticate, updateProfile };

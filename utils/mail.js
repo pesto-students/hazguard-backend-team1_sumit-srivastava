@@ -23,6 +23,18 @@ const sendEmail = (name, email, info, key) => {
 				})
 				.catch((err) => console.log(err));
 			break;
+		case "hazard":
+			transport
+				.sendMail({
+					from: process.env.EMAIL,
+					to: email,
+					subject: "You added an hazard",
+					html: `<h1>hazard Added</h1>
+			  <h2>Hello ${name}</h2>
+			  <p>Thank you for adding a hazard.</p>`,
+				})
+				.catch((err) => console.log(err));
+			break;
 	}
 };
 
