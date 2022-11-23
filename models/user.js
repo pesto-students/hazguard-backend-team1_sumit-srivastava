@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
-import Jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -34,6 +33,10 @@ const userSchema = mongoose.Schema({
 		trim: true,
 		unique: true,
 		lowercase: true,
+	},
+	profilePicture: {
+		type: String,
+		default: "",
 	},
 	mobileNumber: {
 		type: Number,
