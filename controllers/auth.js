@@ -45,7 +45,7 @@ const verify = async (req, res) => {
 };
 
 const generateAccessToken = (userData) => {
-	return Jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30m" });
+	return Jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
 };
 
 const logIn = async (req, res) => {
