@@ -22,6 +22,10 @@ const hazardSchema = mongoose.Schema({
 		required: true,
 		enum: ["Agriculture", "Apparel", "Oil & Gas Production", "Construction", "Manufacturing", "Mining", "Forestry", "Shipping", "Transport", "Utilities"],
 	},
+	department: {
+		type: String,
+		required: true,
+	},
 	hazardLevel: {
 		type: String,
 		required: true,

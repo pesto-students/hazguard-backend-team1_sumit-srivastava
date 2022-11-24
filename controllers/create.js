@@ -12,6 +12,7 @@ const createHazard = (req, res) => {
 			hazardId: v4(),
 			type: req.body.type,
 			industry: req.body.industry,
+			department: req.body.department,
 			hazardLevel: req.body.hazardLevel,
 			effectDuration: req.body.effectDuration,
 			problem: req.body.problem,
