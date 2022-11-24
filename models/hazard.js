@@ -32,9 +32,8 @@ const hazardSchema = mongoose.Schema({
 		enum: ["Low", "Moderate", "High"],
 	},
 	effectDuration: {
-		type: String,
+		type: Number,
 		required: true,
-		default: "0 days",
 	},
 	problem: {
 		type: String,
