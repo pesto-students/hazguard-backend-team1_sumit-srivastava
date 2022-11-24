@@ -34,4 +34,32 @@ const createHazard = (req, res) => {
 	});
 };
 
+// import data from "../HazGuard.json" assert { type: "json" };
+// const createManyHazard = () => {
+// 	data.forEach((element) => {
+// 		const newHazard = new Hazard({
+// 			userId: element.userId,
+// 			hazardId: element.hazardId,
+// 			type: element.type,
+// 			industry: element.industry,
+// 			department: element.department,
+// 			hazardLevel: element.hazardLevel,
+// 			effectDuration: element.effectDuration,
+// 			problem: element.problem,
+// 			solution: element.solution,
+// 			date: element.date,
+// 			views: element.views,
+// 			isPublic: element.isPublic,
+// 			companyName: element.companyName,
+// 			state: element.state,
+// 			country: element.country,
+// 		});
+// 		newHazard.save((err, doc) => {
+// 			if (err) return console.log(err);
+// 		});
+// 	});
+// };
+// createManyHazard();
+// https://www.mockaroo.com/be8a0270
+
 export { createHazard };

@@ -43,7 +43,11 @@ const hazardSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	date: {
+	dateOccured: {
+		type: Date,
+		required: true,
+	},
+	dateShared: {
 		type: Date,
 		required: true,
 	},
@@ -52,10 +56,10 @@ const hazardSchema = mongoose.Schema({
 		required: true,
 		default: 0,
 	},
-	isDeleted: {
+	isPublic: {
 		type: Boolean,
 		required: true,
-		default: false,
+		default: true,
 	},
 	companyName: {
 		type: String,
