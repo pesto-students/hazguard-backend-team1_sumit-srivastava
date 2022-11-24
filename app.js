@@ -7,6 +7,7 @@ import createRoutes from "./routes/create.js";
 import readRoutes from "./routes/read.js";
 import updateRoutes from "./routes/update.js";
 import deleteRoutes from "./routes/delete.js";
+import paymentRoutes from "./routes/payment.js";
 import cors from "cors";
 
 const app = express();
@@ -28,5 +29,6 @@ app.use("/api/create", createRoutes);
 app.use("/api/read", readRoutes);
 app.use("/api/update", updateRoutes);
 app.use("/api/delete", deleteRoutes);
+app.use("/api/payment", paymentRoutes);
 
 export default app;
