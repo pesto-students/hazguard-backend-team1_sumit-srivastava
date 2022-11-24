@@ -8,7 +8,7 @@ const createHazard = (req, res) => {
 		if (err) return res.status(500).json({ error: true, message: err });
 		if (!user) return res.status(404).json({ error: true, message: "User not found!" });
 		const newHazard = new Hazard({
-			userId: req.body.userId,
+			userId: req.user.userId,
 			hazardId: v4(),
 			type: req.body.type,
 			industry: req.body.industry,
