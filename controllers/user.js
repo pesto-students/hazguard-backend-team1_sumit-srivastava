@@ -57,7 +57,7 @@ const getAllSavedHazards = (req, res) => {
 				user.saved.map(async (_id) => {
 					return await Hazard.findById(_id);
 				})
-			),
+			).filter((data) => data.isPublic === true),
 		});
 	});
 };
