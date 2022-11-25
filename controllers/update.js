@@ -8,7 +8,7 @@ const updateHazard = (req, res) => {
 				type: req.body.type,
 				industry: req.body.industry,
 				hazardLevel: req.body.hazardLevel,
-				effectDuration: parseFloat(req.body.effectDuration / 24),
+				effectDuration: parseFloat(req.body.effectDuration / 24).toFixed(3),
 				problem: req.body.problem,
 				solution: req.body.solution,
 				dateOccured: req.body.dateOccured,
@@ -21,44 +21,6 @@ const updateHazard = (req, res) => {
 			if (!doc.modifiedCount) return res.status(409).json({ error: true, message: "No changes!" });
 			return res.status(200).json({
 				message: "Hazard updated succesfully.",
-			});
-		}
-	);
-};
-
-const setHazardVisibilityTrue = (req, res) => {
-	Hazard.updateOne(
-		{ hazardId: req.body.hazardId },
-		{
-			$set: {
-				isPublic: true,
-			},
-		},
-		function (err, doc) {
-			if (err) return res.status(500).json({ error: true, message: err });
-			if (!doc.matchedCount) return res.status(404).json({ error: true, message: "Hazard not found!" });
-			if (!doc.modifiedCount) return res.status(409).json({ error: true, message: "No changes!" });
-			return res.status(200).json({
-				message: "Hazard is public!",
-			});
-		}
-	);
-};
-
-const setHazardVisibilityFalse = (req, res) => {
-	Hazard.updateOne(
-		{ hazardId: req.body.hazardId },
-		{
-			$set: {
-				isPublic: false,
-			},
-		},
-		function (err, doc) {
-			if (err) return res.status(500).json({ error: true, message: err });
-			if (!doc.matchedCount) return res.status(404).json({ error: true, message: "Hazard not found!" });
-			if (!doc.modifiedCount) return res.status(409).json({ error: true, message: "No changes!" });
-			return res.status(200).json({
-				message: "Hazard is hidden!",
 			});
 		}
 	);
@@ -83,4 +45,4 @@ const increaseViewCount = (req, res) => {
 	);
 };
 
-export { updateHazard, setHazardVisibilityTrue, setHazardVisibilityFalse, increaseViewCount };
+export { updateHazard, increaseViewCount };

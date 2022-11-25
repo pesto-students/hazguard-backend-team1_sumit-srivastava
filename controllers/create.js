@@ -14,7 +14,7 @@ const createHazard = (req, res) => {
 			industry: req.body.industry,
 			department: req.body.department,
 			hazardLevel: req.body.hazardLevel,
-			effectDuration: parseFloat(req.body.effectDuration / 24),
+			effectDuration: parseFloat(req.body.effectDuration / 24).toFixed(3),
 			problem: req.body.problem,
 			solution: req.body.solution,
 			dateOccurred: req.body.dateOccurred,
