@@ -19,6 +19,7 @@ const createHazard = (req, res) => {
 			solution: req.body.solution,
 			dateOccurred: req.body.dateOccurred,
 			dateShared: new Date().toISOString(),
+			isPublic: req.body.isPublic,
 			companyName: req.body.companyName,
 			state: req.body.state,
 			country: req.body.country,

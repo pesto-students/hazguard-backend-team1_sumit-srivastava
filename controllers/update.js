@@ -13,6 +13,7 @@ const updateHazard = (req, res) => {
 				solution: req.body.solution,
 				dateOccured: req.body.dateOccured,
 				dateShared: req.body.dateShared,
+				isPublic: req.body.isPublic,
 			},
 		},
 		function (err, doc) {
