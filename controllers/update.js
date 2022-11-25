@@ -64,4 +64,23 @@ const setHazardVisibilityFalse = (req, res) => {
 	);
 };
 
-export { updateHazard, setHazardVisibilityTrue, setHazardVisibilityFalse };
+const increaseViewCount = (req, res) => {
+	Hazard.updateOne(
+		{ hazardId: req.body.hazardId },
+		{
+			$inc: {
+				views: 1,
+			},
+		},
+		function (err, doc) {
+			if (err) return res.status(500).json({ error: true, message: err });
+			if (!doc.matchedCount) return res.status(404).json({ error: true, message: "Hazard not found!" });
+			if (!doc.modifiedCount) return res.status(409).json({ error: true, message: "No change done!" });
+			return res.status(200).json({
+				message: "Increased",
+			});
+		}
+	);
+};
+
+export { updateHazard, setHazardVisibilityTrue, setHazardVisibilityFalse, increaseViewCount };
