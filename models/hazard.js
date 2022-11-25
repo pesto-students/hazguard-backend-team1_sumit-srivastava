@@ -43,7 +43,7 @@ const hazardSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	dateOccured: {
+	dateOccurred: {
 		type: Date,
 		required: true,
 	},

@@ -1,7 +1,7 @@
 import Hazard from "../models/hazard.js";
 
 const readAllHazards = (req, res) => {
-	Hazard.find(function (err, doc) {
+	Hazard.find({ isPublic: true }, function (err, doc) {
 		if (err) return res.status(500).json({ error: true, message: err });
 		if (!doc.length) return res.status(404).json({ error: true, message: "No hazards available!" });
 		return res.status(200).json({
