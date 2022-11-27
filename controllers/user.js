@@ -56,7 +56,7 @@ const getAllSavedHazards = (req, res) => {
 			data: (
 				await Promise.all(
 					user.saved.map(async (_id) => {
-						return await Hazard.findById(_id);
+						return { ...(await Hazard.findById(_id))._doc, isSaved: true };
 					})
 				)
 			).filter((data) => data.isPublic === true),
