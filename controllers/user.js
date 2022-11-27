@@ -65,11 +65,10 @@ const getAllSavedHazards = (req, res) => {
 };
 
 const addToSavedPosts = (req, res) => {
-	Hazard.findOne({ hazardId: req.body.hazardId }, function (err, doc) {
+	Hazard.findById(req.body._id, function (err, doc) {
 		if (err) return res.status(500).json({ error: true, message: err });
 		if (!doc) return res.status(404).json({ error: true, message: "Hazard Not found." });
-		const id = doc._id;
-		User.updateOne({ userId: req.user.userId }, { $push: { saved: id } }, function (err, doc) {
+		User.updateOne({ userId: req.user.userId }, { $push: { saved: req.body._id } }, function (err, doc) {
 			if (err) return res.status(500).json({ error: true, message: err });
 			if (!doc.matchedCount) return res.status(404).json({ error: true, message: "User not found!" });
 			if (!doc.modifiedCount) return res.status(409).json({ error: true, message: "No changes!" });
@@ -79,11 +78,10 @@ const addToSavedPosts = (req, res) => {
 };
 
 const deleteFromSavedPosts = (req, res) => {
-	Hazard.findOne({ hazardId: req.body.hazardId }, function (err, doc) {
+	Hazard.findById(req.body._id, function (err, doc) {
 		if (err) return res.status(500).json({ error: true, message: err });
 		if (!doc) return res.status(404).json({ error: true, message: "Hazard Not found." });
-		const id = doc._id;
-		User.updateOne({ userId: req.user.userId }, { $pull: { saved: id } }, function (err, doc) {
+		User.updateOne({ userId: req.user.userId }, { $pull: { saved: req.body._id } }, function (err, doc) {
 			if (err) return res.status(500).json({ error: true, message: err });
 			if (!doc.matchedCount) return res.status(404).json({ error: true, message: "User not found!" });
 			if (!doc.modifiedCount) return res.status(409).json({ error: true, message: "No changes!" });
