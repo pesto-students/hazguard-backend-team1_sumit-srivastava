@@ -48,22 +48,6 @@ const updateProfile = (req, res) => {
 	);
 };
 
-const getAllSavedHazards = (req, res) => {
-	User.findOne({ userId: req.user.userId }, async function (err, user) {
-		if (err) return res.status(500).json({ error: true, message: err });
-		if (!user) return res.status(404).json({ error: true, message: "User not found!" });
-		return res.status(200).json({
-			data: (
-				await Promise.all(
-					user.saved.map(async (_id) => {
-						return { ...(await Hazard.findById(_id))._doc, isSaved: true };
-					})
-				)
-			).filter((data) => data.isPublic === true),
-		});
-	});
-};
-
 const addToSavedPosts = (req, res) => {
 	Hazard.findById(req.body._id, function (err, doc) {
 		if (err) return res.status(500).json({ error: true, message: err });
@@ -90,4 +74,4 @@ const deleteFromSavedPosts = (req, res) => {
 	});
 };
 
-export { profile, updateProfile, getAllSavedHazards, addToSavedPosts, deleteFromSavedPosts };
+export { profile, updateProfile, addToSavedPosts, deleteFromSavedPosts };
