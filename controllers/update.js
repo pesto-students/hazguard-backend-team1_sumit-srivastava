@@ -8,7 +8,7 @@ const updateHazard = (req, res) => {
 				type: req.body.type,
 				industry: req.body.industry,
 				hazardLevel: req.body.hazardLevel,
-				effectDuration: parseFloat(req.body.effectDuration / 24).toFixed(3),
+				effectDuration: parseFloat(req.body.effectDuration / 24).toFixed(1),
 				problem: req.body.problem,
 				solution: req.body.solution,
 				dateOccured: req.body.dateOccured,

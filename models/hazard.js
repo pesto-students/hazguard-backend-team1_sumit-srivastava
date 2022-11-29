@@ -73,6 +73,9 @@ const hazardSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	images: {
+		type: Array,
+	},
 });
 
 export default mongoose.model("Hazard", hazardSchema);
