@@ -24,16 +24,14 @@ const createHazard = (req, res) => {
 			state: req.body.state,
 			country: req.body.country,
 		});
-		let data;
 		newHazard.save((err, doc) => {
-			data = doc;
 			if (err) return res.status(500).json({ error: true, message: err });
 		});
 		user.postCount += 1;
 		user.save((err, doc) => {
 			if (err) return res.status(500).json({ error: true, message: err });
 			sendEmail(user.firstName, user.email, newHazard, "hazard");
-			return res.status(200).json({ message: "Hazard Saved!", data: data });
+			return res.status(200).json({ message: "Hazard Saved!" });
 		});
 	});
 };
