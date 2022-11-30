@@ -22,8 +22,8 @@ jobs:
                   echo ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }} >> .env
                   echo REFRESH_TOKEN_SECRET=${{ secrets.REFRESH_TOKEN_SECRET }} >> .env
                   echo CONFIRMATION_TOKEN_SECRET=${{ secrets.CONFIRMATION_TOKEN_SECRET }} >> .env
-                  echo EMAIL=${{ secrets.EMAIL }} >> .env
-                  echo PASSWORD=${{ secrets.PASSWORD }} >> .env
+                  echo NODE__MAILER_EMAIL=${{ secrets.EMAIL }} >> .env
+                  echo NODE__MAILER_PASSWORD=${{ secrets.PASSWORD }} >> .env
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v3
               with:

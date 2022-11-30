@@ -3,8 +3,8 @@ import nodemailer from "nodemailer";
 const transport = nodemailer.createTransport({
 	service: "Gmail",
 	auth: {
-		user: process.env.EMAIL,
-		pass: process.env.PASSWORD,
+		user: process.env.NODE__MAILER_EMAIL,
+		pass: process.env.NODE__MAILER_PASSWORD,
 	},
 });
 
@@ -13,7 +13,7 @@ const sendEmail = (name, email, info, key) => {
 		case "verificationEmail":
 			transport
 				.sendMail({
-					from: process.env.EMAIL,
+					from: process.env.NODE__MAILER_EMAIL,
 					to: email,
 					subject: "Please confirm your account",
 					html: `<h1>Email Confirmation</h1>
@@ -26,7 +26,7 @@ const sendEmail = (name, email, info, key) => {
 		case "hazard":
 			transport
 				.sendMail({
-					from: process.env.EMAIL,
+					from: process.env.NODE__MAILER_EMAIL,
 					to: email,
 					subject: "You added an hazard",
 					html: `<h1>hazard Added</h1>
