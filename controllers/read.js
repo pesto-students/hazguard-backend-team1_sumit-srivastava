@@ -17,7 +17,7 @@ const leaderboardData = (req, res) => {
 		if (!doc.length) return res.status(404).json({ error: true, message: "No companies available!" });
 		return res.status(200).json({
 			data: doc.map((data) => {
-				return { companyName: data.companyName, postCount: data.postCount };
+				return { companyName: data.companyName, postCount: data.postCount, country: data.country };
 			}),
 		});
 	});
