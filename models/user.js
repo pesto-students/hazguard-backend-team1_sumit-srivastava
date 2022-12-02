@@ -97,6 +97,10 @@ const userSchema = mongoose.Schema({
 		type: String,
 		unique: true,
 	},
+	loginCount: {
+		type: Number,
+		default: 0,
+	},
 });
 
 userSchema.methods.setPassword = function (password) {
