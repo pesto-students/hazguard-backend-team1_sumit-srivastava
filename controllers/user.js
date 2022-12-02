@@ -18,7 +18,6 @@ const profile = (req, res) => {
 			department: user.department,
 			postCount: user.postCount,
 			saved: user.saved,
-			loginCount: user.loginCount,
 		});
 	});
 };
