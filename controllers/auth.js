@@ -81,6 +81,19 @@ const logIn = (req, res) => {
 		const token = new Token({
 			token: refreshToken,
 		});
+		User.updateOne(
+			{ email: req.body.email },
+			{
+				$inc: {
+					loginCount: 1,
+				},
+			},
+			function (err, doc) {
+				if (err) return res.status(500).json({ error: true, message: err });
+				if (!doc.matchedCount) return res.status(404).json({ error: true, message: "User not found!" });
+				if (!doc.modifiedCount) return res.status(409).json({ error: true, message: "Nothing changed!" });
+			}
+		);
 		token.save((err, doc) => {
 			if (err) return res.status(500).json({ error: true, message: err });
 			return res.status(200).json({
