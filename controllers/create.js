@@ -23,6 +23,7 @@ const createHazard = (req, res) => {
 			companyName: req.body.companyName,
 			state: req.body.state,
 			country: req.body.country,
+			images: req.body.images,
 		});
 		newHazard.save((err, doc) => {
 			if (err) return res.status(500).json({ error: true, message: err });
