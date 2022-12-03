@@ -77,8 +77,8 @@ const userSchema = mongoose.Schema({
 	},
 	subscriptionType: {
 		type: String,
-		enum: ["", "National", "International"],
-		default: "",
+		enum: ["Free", "National", "International"],
+		default: "Free",
 	},
 	hash: {
 		type: String,
