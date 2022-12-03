@@ -70,11 +70,6 @@ const userSchema = mongoose.Schema({
 			ref: "Hazards",
 		},
 	],
-	subscriptionStatus: {
-		type: String,
-		enum: ["Not Active", "Active"],
-		default: "Not Active",
-	},
 	subscriptionType: {
 		type: String,
 		enum: ["Free", "National", "International"],
