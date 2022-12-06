@@ -15,7 +15,6 @@ const paymentsSchema = new mongoose.Schema({
 	country: {
 		type: String,
 		required: true,
-		lowercase: true,
 	},
 	orderId: {
 		type: String,
@@ -32,16 +31,15 @@ const paymentsSchema = new mongoose.Schema({
 		required: true,
 		unique: true,
 	},
-	subLevel: {
-		type: Number,
+	subscriptionType: {
+		type: String,
 		required: true,
-		default: 0,
-		enum: [0, 1, 2],
+		enum: ["Free", "National", "International"],
+		default: "Free",
 	},
 	amountPaid: {
 		type: Number,
 		required: true,
-		default: 0,
 	},
 	paymentDate: {
 		type: Date,
