@@ -24,6 +24,8 @@ jobs:
                   echo CONFIRMATION_TOKEN_SECRET=${{ secrets.CONFIRMATION_TOKEN_SECRET }} >> .env
                   echo NODE__MAILER_EMAIL=${{ secrets.EMAIL }} >> .env
                   echo NODE__MAILER_PASSWORD=${{ secrets.PASSWORD }} >> .env
+                  echo RAZORPAY_KEY_ID=${{ secrets.RAZORPAY_KEY_ID }} >> .env
+                  echo RAZORPAY_SECRET=${{ secrets.RAZORPAY_SECRET }} >> .env
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v3
               with:
