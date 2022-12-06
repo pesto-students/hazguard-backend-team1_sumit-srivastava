@@ -4,13 +4,11 @@ const hazardSchema = mongoose.Schema({
 	userId: {
 		type: String,
 		required: true,
-		trim: true,
 	},
 	hazardId: {
 		type: String,
 		required: true,
 		unique: true,
-		trim: true,
 	},
 	type: {
 		type: String,

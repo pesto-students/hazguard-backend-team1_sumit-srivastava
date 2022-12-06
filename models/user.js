@@ -8,7 +8,6 @@ const userSchema = mongoose.Schema({
 	userId: {
 		type: String,
 		required: true,
-		trim: true,
 		unique: true,
 	},
 	companyName: {
@@ -19,18 +18,15 @@ const userSchema = mongoose.Schema({
 		type: String,
 		required: true,
 		maxlength: 100,
-		trim: true,
 	},
 	lastName: {
 		type: String,
 		maxlength: 100,
-		trim: true,
 		default: "",
 	},
 	email: {
 		type: String,
 		required: true,
-		trim: true,
 		unique: true,
 		lowercase: true,
 	},
@@ -39,7 +35,7 @@ const userSchema = mongoose.Schema({
 		default: "",
 	},
 	mobileNumber: {
-		type: Number,
+		type: String,
 		trim: true,
 		default: "",
 	},
