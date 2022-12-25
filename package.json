@@ -5,7 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll"
   },
   "license": "ISC",
   "dependencies": {
@@ -22,6 +23,9 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@jest/globals": "^29.3.1",
+    "jest": "^29.3.1",
+    "jest-cli": "^29.3.1",
     "nodemon": "^2.0.20"
   }
 }
