@@ -7,7 +7,7 @@ const transport = nodemailer.createTransport({
 		pass: process.env.NODE__MAILER_PASSWORD,
 	},
 });
-
+// Function to send mail
 const sendEmail = (name, email, info, key) => {
 	switch (key) {
 		case "verificationEmail":
