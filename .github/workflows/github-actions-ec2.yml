@@ -1,35 +1,35 @@
 name: Node.js CI
 
 on:
-    push:
-        branches: ["master"]
+  push:
+    branches: ["master"]
 
 jobs:
-    build:
-        runs-on: self-hosted
+  build:
+    runs-on: self-hosted
 
-        strategy:
-            matrix:
-                node-version: [18.x]
+    strategy:
+      matrix:
+        node-version: [20.x]
 
-        steps:
-            - uses: actions/checkout@v3
-            - name: create env file
-              run: |
-                  touch .env
-                  echo MONOGODBURL=${{ secrets.MONOGODBURL }} >> .env
-                  echo PORT=${{ secrets.PORT }} >> .env
-                  echo ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }} >> .env
-                  echo REFRESH_TOKEN_SECRET=${{ secrets.REFRESH_TOKEN_SECRET }} >> .env
-                  echo CONFIRMATION_TOKEN_SECRET=${{ secrets.CONFIRMATION_TOKEN_SECRET }} >> .env
-                  echo NODE__MAILER_EMAIL=${{ secrets.EMAIL }} >> .env
-                  echo NODE__MAILER_PASSWORD=${{ secrets.PASSWORD }} >> .env
-                  echo RAZORPAY_KEY_ID=${{ secrets.RAZORPAY_KEY_ID }} >> .env
-                  echo RAZORPAY_SECRET=${{ secrets.RAZORPAY_SECRET }} >> .env
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v3
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: "npm"
-            - run: npm ci
-            - run: pm2 restart server
+    steps:
+      - uses: actions/checkout@v3
+      - name: create env file
+        run: |
+          touch .env
+          echo MONOGODBURL=${{ secrets.MONOGODBURL }} >> .env
+          echo PORT=${{ secrets.PORT }} >> .env
+          echo ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }} >> .env
+          echo REFRESH_TOKEN_SECRET=${{ secrets.REFRESH_TOKEN_SECRET }} >> .env
+          echo CONFIRMATION_TOKEN_SECRET=${{ secrets.CONFIRMATION_TOKEN_SECRET }} >> .env
+          echo NODE__MAILER_EMAIL=${{ secrets.EMAIL }} >> .env
+          echo NODE__MAILER_PASSWORD=${{ secrets.PASSWORD }} >> .env
+          echo RAZORPAY_KEY_ID=${{ secrets.RAZORPAY_KEY_ID }} >> .env
+          echo RAZORPAY_SECRET=${{ secrets.RAZORPAY_SECRET }} >> .env
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm ci
+      - run: pm2 delete -s server || pm2 start ./server.js --name=server
